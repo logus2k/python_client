@@ -1,1 +1,0 @@
-source VENV/bin/activate
