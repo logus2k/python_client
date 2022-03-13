@@ -22,22 +22,29 @@ class IDencode:
 
     def enroll(self) -> EnrollResult:
 
-        face_image_file = os.path.basename(self._config._faceImagePath)
-        demographics_file = \
-            os.path.basename(self._config._demographicsFilePath)
+        multipartdata_fields = {}
 
-        multipart_data = MultipartEncoder(
-            fields={"face_image": (face_image_file,
-                                   open(self._config._faceImagePath, "rb"),
-                                   "image/jpeg"),
-                    "demog": (demographics_file,
-                              open(self._config._demographicsFilePath, "rb"),
-                              "application/octet-stream"),
-                    "pipeline": ("pipeline.json",
-                                 json.dumps(self._config.pipeline),
-                                 "application/json")
-                    }
-                )
+        face_image_file = os.path.basename(self._config._faceImagePath)
+        face_image_field = (face_image_file,
+                            open(self._config._faceImagePath, "rb"),
+                            "image/jpeg")
+        multipartdata_fields["face_image"] = face_image_field
+
+        if self._config._includeDemographics is True:
+            demographics_file = \
+                os.path.basename(self._config._demographicsFilePath)
+            demographics_field = (demographics_file,
+                                  open(self._config._demographicsFilePath,
+                                       "rb"),
+                                  "application/octet-stream")
+            multipartdata_fields["demog"] = demographics_field
+
+        pipeline_field = ("pipeline.json",
+                          json.dumps(self._config.pipeline),
+                          "application/json")
+        multipartdata_fields["pipeline"] = pipeline_field
+
+        multipart_data = MultipartEncoder(fields=multipartdata_fields)
 
         response = requests.post(
             self._config._idencodeBaseUrl + "enroll",

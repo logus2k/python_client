@@ -41,6 +41,12 @@ class Configuration:
             }
         }
 
+        if (properties.includeDemographics is not None and
+           properties.includeDemographics.lower() == "true"):
+            self._includeDemographics = True
+        else:
+            self._includeDemographics = False
+
         if (properties.includeFaceTemplate is not None and
            properties.includeFaceTemplate.lower() == "true"):
             self.pipeline["facePipeline"]["performTemplateExtraction"] = True
