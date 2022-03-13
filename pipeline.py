@@ -14,6 +14,10 @@ class Configuration:
         properties = type("Names", (), settings_dictionary)
 
         self._idencodeBaseUrl = settings_dictionary["idencodeBaseUrl"]
+        self._faceImagePath = settings_dictionary["faceImagePath"]
+        self._demographicsFilePath = \
+            settings_dictionary["demographicsFilePath"]
+        self._outputFilesPath = settings_dictionary["outputFilesPath"]
 
         self.pipeline = {
             "facePipeline": {

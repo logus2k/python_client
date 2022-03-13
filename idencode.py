@@ -23,10 +23,15 @@ class IDencode:
 
     def enroll(self) -> EnrollResult:
 
+        face_image_file = os.path.basename(self._config._faceImagePath)
+        demographics_file = os.path.basename(self._config.demographicsFilePath)
+
         multipart_data = MultipartEncoder(
-            fields={"face_image": ("antonio.jpg", open("antonio.jpg", "rb"),
+            fields={"face_image": (face_image_file,
+                                   open(self._config._faceImagePath, "rb"),
                                    "image/jpeg"),
-                    "demog": ("demog.txt", open("demog.txt", "rb"),
+                    "demog": (demographics_file,
+                              open(self._config.demographicsFilePath, "rb"),
                               "application/octet-stream"),
                     "pipeline": ("pipeline.json",
                                  json.dumps(self._config.pipeline),
@@ -43,7 +48,7 @@ class IDencode:
         uuid = json_attributes["uuid"]
         base64_image = json_attributes["image"]
 
-        output_directory = os.path.join(os.getcwd(), "output", uuid)
+        output_directory = os.path.join(self._config._outputFilesPath, uuid)
         os.makedirs(output_directory, exist_ok=True)
 
         file = open(os.path.join(output_directory, "pipeline.json"), "w")
