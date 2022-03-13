@@ -24,14 +24,15 @@ class IDencode:
     def enroll(self) -> EnrollResult:
 
         face_image_file = os.path.basename(self._config._faceImagePath)
-        demographics_file = os.path.basename(self._config.demographicsFilePath)
+        demographics_file = \
+            os.path.basename(self._config._demographicsFilePath)
 
         multipart_data = MultipartEncoder(
             fields={"face_image": (face_image_file,
                                    open(self._config._faceImagePath, "rb"),
                                    "image/jpeg"),
                     "demog": (demographics_file,
-                              open(self._config.demographicsFilePath, "rb"),
+                              open(self._config._demographicsFilePath, "rb"),
                               "application/octet-stream"),
                     "pipeline": ("pipeline.json",
                                  json.dumps(self._config.pipeline),
